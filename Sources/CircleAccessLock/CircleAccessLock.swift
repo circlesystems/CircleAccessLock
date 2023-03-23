@@ -31,6 +31,13 @@ public final class CircleAccessLock: NSObject {
       name: UIApplication.protectedDataWillBecomeUnavailableNotification,
       object: nil
     )
+
+    // when the app is killed
+    NotificationCenter.default.addObserver(
+      self,
+      selector: #selector(appProtectedDataWillBecomeUnavailable),
+      name: UIApplication.willTerminateNotification,
+      object: nil)
   }
 
   @objc private func sceneWillEnterForeground(_ notification: Notification) {
