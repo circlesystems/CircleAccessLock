@@ -23,11 +23,23 @@ public final class CircleAccessLock: NSObject {
       name: UIScene.willEnterForegroundNotification,
       object: nil
     )
+
+    // called when the app is locked
+    NotificationCenter.default.addObserver(
+      self,
+      selector: #selector(appProtectedDataWillBecomeUnavailable),
+      name: UIApplication.protectedDataWillBecomeUnavailableNotification,
+      object: nil
+    )
   }
 
   @objc private func sceneWillEnterForeground(_ notification: Notification) {
     guard let parentViewController = parentViewController else { return }
     presentWebViewController(parentViewController: parentViewController)
+  }
+
+  @objc private func appProtectedDataWillBecomeUnavailable() {
+     CircleViewController.saveTime(time: 0)
   }
 
   private func presentWebViewController(parentViewController: UIViewController) {
@@ -220,7 +232,7 @@ extension CircleViewController: WKUIDelegate, WKNavigationDelegate {
     return userDefaults.double(forKey: "lastTime")
   }
 
-  static func saveTime(time: TimeInterval) {
+  public static func saveTime(time: TimeInterval) {
     let userDefaults = UserDefaults.standard
     return userDefaults.set(time, forKey: "lastTime")
   }
