@@ -37,7 +37,8 @@ public final class CircleAccessLock: NSObject {
 
     if  CGFloat(now - lastTime) > CGFloat(maxTime) {
       webViewController.modalPresentationStyle = .fullScreen
-      parentViewController.present(webViewController, animated: true, completion: nil)
+      let navC = UINavigationController(rootViewController: webViewController)
+      parentViewController.present(navC, animated: true, completion: nil)
     }
   }
 
