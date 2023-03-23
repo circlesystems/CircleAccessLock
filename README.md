@@ -1,6 +1,6 @@
 # CircleAccessLock
 
-CircleAccessLock is a package that allows you to display a lock screen to the user after a certain amount of time has passed. The lock screen can be configured to display any web page and can be customized to match your app's branding.
+CircleAccessLock is a package that allows you to display a lock screen using Circle Technology.
 
 ## Installation
 
