@@ -6,11 +6,14 @@ import WebKit
 public final class CircleAccessLock: NSObject {
   private weak var parentViewController: UIViewController?
   private var webViewController: CircleViewController?
+  private var isEnabled: Bool
 
   public init(parentViewController: UIViewController, initialUrl: String = CircleViewController.defaultUrl) {
     self.parentViewController = parentViewController
 
     self.webViewController = CircleViewController(initialUrl: initialUrl)
+
+    self.isEnabled = true
 
     super.init()
 
@@ -28,18 +31,26 @@ public final class CircleAccessLock: NSObject {
   }
 
   private func presentWebViewController(parentViewController: UIViewController) {
-    guard let webViewController = webViewController else { return }
+    guard let webViewController = webViewController, isEnabled else { return }
 
-    // Circle Browser
+    // Circle Access Lock time control
     let now = Date().timeIntervalSinceReferenceDate
     let lastTime = CircleViewController.getLastTime() ?? 0
     let maxTime = CircleViewController.getMaxTime()
 
     if  CGFloat(now - lastTime) > CGFloat(maxTime) {
-      webViewController.modalPresentationStyle = .fullScreen
       let navC = UINavigationController(rootViewController: webViewController)
+      navC.modalPresentationStyle = .fullScreen
       parentViewController.present(navC, animated: true, completion: nil)
     }
+  }
+
+  public func enable() {
+    isEnabled = true
+  }
+
+  public func disable() {
+    isEnabled = false
   }
 
   deinit {
@@ -112,7 +123,7 @@ public class CircleViewController: UIViewController {
 
   private func getSavedUrl() -> String {
     if let url = CircleViewController.getSavedURL() {
-        return url
+      return url
     }
     return CircleViewController.defaultUrl
   }
